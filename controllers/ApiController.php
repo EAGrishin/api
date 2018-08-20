@@ -43,10 +43,13 @@ class ApiController extends Controller
 
     public function actionIp()
     {
-        $ip = json_decode(Yii::$app->request->post('body'));
+        $ip = json_decode(Yii::$app->request->post('body'), true);
         $data = Yii::$app->geoip->ip($ip);
-        if ($data && $data->country) {
-            return $data->country;
+        if ($data) {
+            return [
+                'country' => $data->country,
+                'city' => $data->city
+            ];
         } else {
             return "Sorry...This country could not be found";
         }
